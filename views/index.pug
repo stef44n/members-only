@@ -7,9 +7,23 @@ html(lang='en')
   body
     if user
       h1 WELCOME BACK #{user.username}
+      hr
+      h3 user object - #{user}
+      h2 username - #{user.username}
+      h2 first name - #{user.first_name}
+      h2 family name - #{user.family_name}
+      h2 user membership - #{user.hasMembership}
+      hr
+      p Create new message (link)
+      input(type="text")
+      if user.hasMembership
+        p You are a member already!
+      else
+        p Join the club (link)
+      hr
       a(href='/log-out') LOG OUT
     else
-      h1 please log in
+      h1 Please Log In
       form(action='/log-in', method='POST')
         label(for='username') Username
         input(name='username', placeholder='username', type='text')
