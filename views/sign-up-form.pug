@@ -4,9 +4,16 @@ head
   title
 h1 Sign Up
 form(action='', method='POST')
-  label(for='username') Username
+  label(for='username') Username 
   input(name='username', placeholder='username', type='text')
-  label(for='password') Password
-  input(name='password', type='password')
+  br
+  label(for='first_name') First Name 
+  input(name='first_name', placeholder='first_name', type='text')
+  br
+  label(for='family_name')  Family Name 
+  input(name='family_name', placeholder='family_name', type='text')
+  br
+  label(for='password') Password 
+  input(name='password', type='password') 
   button Sign Up
 a(href='/') Log in
