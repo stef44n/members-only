@@ -38,3 +38,13 @@ html(lang='en')
         input(name='password', type='password')
         button Log In
       a(href='/sign-up') Sign up
+
+  //- p message #{messages}
+  h2 Messages
+  ul 
+    each message in messages 
+      li #{message.title}
+      li #{message.content}
+      if user
+        li #{message.timestamp}
+        li #{message.user}
