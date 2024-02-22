@@ -15,7 +15,7 @@ html(lang='en')
       h2 family name - #{user.family_name}
       h2 user membership - #{user.hasMembership}
       hr
-      p Create new message (link)
+      h2 Create new message
       form(action="/", method="POST") 
         label(for="title") Title 
         input(name='title' id='title' type="text" placeholder='Message title') 
@@ -23,10 +23,11 @@ html(lang='en')
         label(for="content") Content
         input(name='content' id='content' type="text" placeholder='Create a new message')
         button Send message
+      hr
       if user.hasMembership
         p You are a member already!
       else
-        p Join the club (link)
+        button Join the club
       hr
       a(href='/log-out') LOG OUT
     else
@@ -41,10 +42,13 @@ html(lang='en')
 
   //- p message #{messages}
   h2 Messages
-  ul 
-    each message in messages 
-      li #{message.title}
-      li #{message.content}
+  each message in messages 
+    div(style='border: none; margin:10px 0; padding:10px; background:#dbd6d6; border-radius: 5px')
+      h4 #{message.title}
+      p #{message.content}
       if user
         li #{message.timestamp}
-        li #{message.user}
+        if message.user
+          li By #{message.user.username}
+        else 
+          li By Unknown User
