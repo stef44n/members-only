@@ -13,14 +13,13 @@ const mongoDb = process.env.SECRET_KEY;
 mongoose.connect(mongoDb);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "mongo connection error"));
+db.once("open", () => {
+    console.log("Connected to MongoDB");
+    // console.log(db.collections);
+});
 
-const User = mongoose.model(
-    "User",
-    new Schema({
-        username: { type: String, required: true },
-        password: { type: String, required: true },
-    })
-);
+const User = require("./models/user");
+const Message = require("./models/message");
 
 const app = express();
 app.set("views", path.join(__dirname, "views"));
@@ -68,45 +67,26 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get("/", (req, res) => {
-    res.render("index", { user: req.user });
-});
+//ROUTES
+const indexRouter = require("./routes/index");
+const authRouter = require("./routes/auth");
 
-app.get("/sign-up", (req, res) => res.render("sign-up-form"));
+app.use("/", indexRouter);
+app.use("/", authRouter);
 
-app.get("/log-out", (req, res, next) => {
-    req.logout((err) => {
-        if (err) {
-            return next(err);
-        }
-        res.redirect("/");
-    });
-});
-
-app.post("/sign-up", async (req, res, next) => {
+app.post("/", async (req, res) => {
     try {
-        bcryptjs.hash(req.body.password, 10, async (err, hashedPassword) => {
-            // if err, do something
-            // otherwise, store hashedPassword in DB
-            const user = new User({
-                username: req.body.username,
-                password: hashedPassword,
-            });
-            const result = await user.save();
+        const message = new Message({
+            title: req.body.title,
+            content: req.body.content,
+            user: res.locals.currentUser,
         });
+        await message.save();
         res.redirect("/");
     } catch (err) {
-        return next(err);
+        console.error(err);
     }
 });
-
-app.post(
-    "/log-in",
-    passport.authenticate("local", {
-        successRedirect: "/",
-        failureRedirect: "/",
-    })
-);
 
 app.listen(3000, () => console.log("app listening on port 3000!"));
 
