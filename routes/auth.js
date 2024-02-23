@@ -36,6 +36,30 @@ router.post(
     })
 );
 
+// Route to handle updating user membership
+router.post("/become-member", isLoggedIn, async (req, res) => {
+    try {
+        // Get the logged-in user ID
+        const userId = req.user._id;
+
+        // Find the user by ID and update the hasMembership property
+        await User.findByIdAndUpdate(userId, { hasMembership: true });
+
+        res.redirect("/"); // Redirect to the home page or any other page after updating membership
+    } catch (error) {
+        console.error("Error updating membership status:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+// Middleware to check if the user is authenticated
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login"); // Redirect to login page if not authenticated
+}
+
 // Log-out route
 // router.get("/log-out", (req, res) => {
 //     req.logout();
