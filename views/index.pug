@@ -27,7 +27,8 @@ html(lang='en')
       if user.hasMembership
         p You are a member already!
       else
-        button Join the club
+        form(action="/become-member", method="POST")
+          button(type='submit') Join the club
       hr
       a(href='/log-out') LOG OUT
     else
