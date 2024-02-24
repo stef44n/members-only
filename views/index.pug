@@ -53,3 +53,6 @@ html(lang='en')
           li By #{message.user.username}
         else 
           li By Unknown User
+        if user.hasMembership 
+          form(action=`/delete-message/${message._id}`, method="POST")
+            button(type='submit') DELETE
