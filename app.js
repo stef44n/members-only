@@ -19,7 +19,7 @@ db.once("open", () => {
 });
 
 const User = require("./models/user");
-const Message = require("./models/message");
+// const Message = require("./models/message");
 
 const app = express();
 app.set("views", path.join(__dirname, "views"));
@@ -70,23 +70,25 @@ app.use((req, res, next) => {
 //ROUTES
 const indexRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
+const messageRouter = require("./routes/messages");
 
 app.use("/", indexRouter);
 app.use("/", authRouter);
+app.use("/", messageRouter);
 
-app.post("/", async (req, res) => {
-    try {
-        const message = new Message({
-            title: req.body.title,
-            content: req.body.content,
-            user: res.locals.currentUser,
-        });
-        await message.save();
-        res.redirect("/");
-    } catch (err) {
-        console.error(err);
-    }
-});
+// app.post("/", async (req, res) => {
+//     try {
+//         const message = new Message({
+//             title: req.body.title,
+//             content: req.body.content,
+//             user: res.locals.currentUser,
+//         });
+//         await message.save();
+//         res.redirect("/");
+//     } catch (err) {
+//         console.error(err);
+//     }
+// });
 
 app.listen(3000, () => console.log("app listening on port 3000!"));
 
